@@ -46,7 +46,7 @@
 #include "adb.h"
 #include "transport.h"
 
-using namespace std::literals;
+//using namespace std::literals;
 
 /* usb scan debugging is waaaay too verbose */
 #define DBGX(x...)
@@ -317,7 +317,7 @@ static int usb_bulk_write(usb_handle* h, const void* data, int len) {
     h->urb_out_busy = true;
     while (true) {
         auto now = std::chrono::system_clock::now();
-        if (h->cv.wait_until(lock, now + 5s) == std::cv_status::timeout || h->dead) {
+        if (h->cv.wait_until(lock, now + std::chrono::seconds(5)) == std::cv_status::timeout || h->dead) {
             // TODO: call USBDEVFS_DISCARDURB?
             errno = ETIMEDOUT;
             return -1;

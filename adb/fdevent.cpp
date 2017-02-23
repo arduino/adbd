@@ -37,12 +37,12 @@
 #include "adb_trace.h"
 #include "adb_utils.h"
 
-#if !ADB_HOST
+//#if !ADB_HOST
 // This socket is used when a subproc shell service exists.
 // It wakes up the fdevent_loop() and cause the correct handling
 // of the shell's pseudo-tty master. I.e. force close it.
 int SHELL_EXIT_NOTIFY_FD = -1;
-#endif // !ADB_HOST
+//#endif // !ADB_HOST
 
 #define FDE_EVENTMASK  0x00ff
 #define FDE_STATEMASK  0xff00

@@ -125,7 +125,7 @@ class ShellProtocol {
     DISALLOW_COPY_AND_ASSIGN(ShellProtocol);
 };
 
-#if !ADB_HOST
+//#if !ADB_HOST
 
 enum class SubprocessType {
     kPty,
@@ -144,6 +144,6 @@ enum class SubprocessProtocol {
 int StartSubprocess(const char* name, const char* terminal_type,
                     SubprocessType type, SubprocessProtocol protocol);
 
-#endif  // !ADB_HOST
+//#endif  // !ADB_HOST
 
 #endif  // SHELL_SERVICE_H_

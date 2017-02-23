@@ -109,8 +109,12 @@ cleanup:
 }
 
 static bool android_pubkey_encode_bignum(const BIGNUM* num, uint8_t* buffer) {
-  if (!BN_bn2bin_padded(buffer, ANDROID_PUBKEY_MODULUS_SIZE, num)) {
+  if (ANDROID_PUBKEY_MODULUS_SIZE < BN_num_bytes(num)) {
     return false;
+  }
+  memset(buffer, 0, ANDROID_PUBKEY_MODULUS_SIZE);
+  if (!BN_bn2bin(num, buffer+(ANDROID_PUBKEY_MODULUS_SIZE-BN_num_bytes(num)))) {
+return false;
   }
 
   reverse_bytes(buffer, ANDROID_PUBKEY_MODULUS_SIZE);

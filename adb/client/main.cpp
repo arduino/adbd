@@ -39,6 +39,11 @@
 #include "adb_utils.h"
 #include "transport.h"
 
+extern "C" {
+  int __android_log_security_bswrite() { }
+  int __android_log_print() { }
+}
+
 #if defined(_WIN32)
 static BOOL WINAPI ctrlc_handler(DWORD type) {
     // TODO: Consider trying to kill a starting up adb server (if we're in
