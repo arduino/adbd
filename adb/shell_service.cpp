@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2015 The Android Open Source Project
  *
@@ -82,10 +83,12 @@
 #include "shell_service.h"
 
 #include <errno.h>
-#ifndef __APPLE__
+#ifdef __linux__
 #include <pty.h>
 #else
+#ifdef __APPLE__
 #include <util.h>
+#endif
 #endif
 #include <pwd.h>
 #include <sys/select.h>

@@ -44,6 +44,8 @@
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
+#else
+#include <inttypes.h>
 #endif
 
 #include "adb.h"

@@ -14,11 +14,11 @@ SRCS+=get_my_path_windows.cpp line_printer.cpp services.cpp shell_service.cpp
 SRCS+=shell_service_protocol.cpp sockets.cpp sysdeps_win32.cpp transport.cpp
 SRCS+=transport_local.cpp transport_usb.cpp usb_windows.cpp
 
-VPATH+= ../libcutils
-CSRCS+=load_file.c socket_inaddr_any_server_windows.c socket_local_client_windows.c
-CSRCS+=socket_local_server_windows.c socket_loopback_client_windows.c
-CSRCS+=socket_loopback_server_windows.c socket_network_client_windows.c
-CSRCS+=threads.c
+#VPATH+= ../libcutils
+#CSRCS+=load_file.c socket_inaddr_any_server_windows.c socket_local_client_windows.c
+#CSRCS+=socket_local_server_windows.c socket_loopback_client_windows.c
+#CSRCS+=socket_loopback_server_windows.c socket_network_client_windows.c
+#CSRCS+=threads.c
 
 VPATH+=../base
 SRCS+=file.cpp logging.cpp parsenetaddress.cpp stringprintf.cpp strings.cpp
@@ -28,10 +28,9 @@ CSRCS+=android_pubkey.c
 
 CPPFLAGS+=-DADB_HOST=1
 CPPFLAGS+=-DHAVE_FORKEXEC=1
-CPPFLAGS+=-DHAVE_SYMLINKS
-CPPFLAGS+=-DHAVE_TERMIO_H
 CPPFLAGS+=-D_GNU_SOURCE
 CPPFLAGS+=-D_XOPEN_SOURCE
+CPPFLAGS+=-D__STDC_FORMAT_MACROS
 CPPFLAGS+=-I.
 CPPFLAGS+=-I../include
 CPPFLAGS+=-I../base/include
@@ -42,7 +41,7 @@ CPPFLAGS+=-D_Nullable=
 CXXFLAGS+=-O2 -g -std=gnu++11 -fpermissive
 CFLAGS+=-O2 -g -std=gnu99
 LDFLAGS=-s
-LIBS=-lws2_32 -luserenv -static -lwinpthread
+LIBS=-lws2_32 -luserenv -static -lwinpthread -municode
 
 OBJS=$(SRCS:.cpp=.o) $(CSRCS:.c=.o)
 OBJS=$(patsubst %.cpp,.build/%.o,$(SRCS)) $(patsubst %.c,.build/%.o,$(CSRCS))
