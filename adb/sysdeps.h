@@ -756,7 +756,7 @@ static __inline__ void __attribute__((noreturn)) adb_thread_exit() {
 
 static __inline__ int adb_thread_setname(const std::string& name) {
 #ifdef __APPLE__
-    return pthread_setname_np(name.c_str());
+    return 0; //pthread_setname_np(name.c_str());
 #else
     const char *s = name.c_str();
 

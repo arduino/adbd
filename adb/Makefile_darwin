@@ -39,8 +39,8 @@ CPPFLAGS+=-I../libcrypto_utils/include
 CPPFLAGS+=-DADB_REVISION='"$(shell date +%Y-%m-%d)"'
 CPPFLAGS+=-D_Nonnull=
 CPPFLAGS+=-D_Nullable=
-CXXFLAGS+=-O2 -g -std=gnu++11 -fpermissive
-CFLAGS+=-O2 -g -std=gnu99
+CXXFLAGS+=-O2 -g -std=gnu++14 -fpermissive -Wexit-time-destructors
+CFLAGS+=-O2 -g
 LDFLAGS=-s
 LIBS=-framework CoreFoundation -framework IOKit -lobjc
 

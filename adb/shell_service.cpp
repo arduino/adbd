@@ -82,7 +82,11 @@
 #include "shell_service.h"
 
 #include <errno.h>
+#ifndef __APPLE__
 #include <pty.h>
+#else
+#include <util.h>
+#endif
 #include <pwd.h>
 #include <sys/select.h>
 #include <termios.h>
@@ -242,6 +246,7 @@ bool Subprocess::ForkAndExec(std::string* error) {
     // Construct the environment for the child before we fork.
     passwd* pw = getpwuid(getuid());
     std::unordered_map<std::string, std::string> env;
+#ifndef __APPLE__
     if (environ) {
         char** current = environ;
         while (char* env_cstr = *current++) {
@@ -255,6 +260,7 @@ bool Subprocess::ForkAndExec(std::string* error) {
             }
         }
     }
+#endif
 
     if (pw != nullptr) {
         // TODO: $HOSTNAME? Normally bash automatically sets that, but mksh doesn't.
@@ -572,7 +578,9 @@ ScopedFd* Subprocess::PassInput() {
                         ws.ws_col = cols;
                         ws.ws_xpixel = x_pixels;
                         ws.ws_ypixel = y_pixels;
+			#ifndef __APPLE__
                         ioctl(stdinout_sfd_.fd(), TIOCSWINSZ, &ws);
+			#endif
                     }
                     break;
                 case ShellProtocol::kIdStdin:
