@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef _WIN32
 #include <sys/syscall.h>
+#endif
 /* this file contains system-dependent definitions used by ADB
  * they're related to threads, sockets and file descriptors
  */
@@ -830,8 +832,8 @@ static __inline__ int adb_is_absolute_host_path(const char* path) {
 
 static __inline__ unsigned long adb_thread_id()
 {
-//    return (unsigned long)gettid();
-    return (unsigned long)syscall(__NR_gettid);
+    return (unsigned long)gettid();
+//    return (unsigned long)syscall(__NR_gettid);
 }
 
 #endif /* !_WIN32 */

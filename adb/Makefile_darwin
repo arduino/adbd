@@ -10,14 +10,15 @@
 SRCS+=client/main.cpp adb.cpp adb_auth.cpp adb_auth_host.cpp adb_client.cpp
 SRCS+=adb_io.cpp adb_listeners.cpp adb_trace.cpp adb_utils.cpp commandline.cpp
 SRCS+=console.cpp diagnose_usb.cpp fdevent.cpp file_sync_client.cpp
-SRCS+=get_my_path_linux.cpp line_printer.cpp services.cpp shell_service.cpp
+SRCS+=get_my_path_darwin.cpp line_printer.cpp services.cpp shell_service.cpp
 SRCS+=shell_service_protocol.cpp sockets.cpp sysdeps_unix.cpp transport.cpp
-SRCS+=transport_local.cpp transport_usb.cpp usb_linux.cpp
+SRCS+=transport_local.cpp transport_usb.cpp usb_osx.cpp
 
 VPATH+= ../libcutils
 CSRCS+=load_file.c socket_inaddr_any_server_unix.c socket_local_client_unix.c
 CSRCS+=socket_local_server_unix.c socket_loopback_client_unix.c
 CSRCS+=socket_loopback_server_unix.c socket_network_client_unix.c
+CSRCS+=threads.c
 
 VPATH+=../base
 SRCS+=file.cpp logging.cpp parsenetaddress.cpp stringprintf.cpp strings.cpp
@@ -41,7 +42,7 @@ CPPFLAGS+=-D_Nullable=
 CXXFLAGS+=-O2 -g -std=gnu++11 -fpermissive
 CFLAGS+=-O2 -g -std=gnu99
 LDFLAGS=-s
-LIBS=-lrt -lpthread -lcrypto -lssl -lz -lutil
+LIBS=-framework CoreFoundation -framework IOKit -lobjc
 
 OBJS=$(SRCS:.cpp=.o) $(CSRCS:.c=.o)
 OBJS=$(patsubst %.cpp,.build/%.o,$(SRCS)) $(patsubst %.c,.build/%.o,$(CSRCS))
@@ -51,7 +52,7 @@ $(OBJS): | .build
 	@mkdir -p $@/client
 
 adb: $(OBJS)
-	$(CXX) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
+	$(CXX) $(CPPFLAGS)  -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
 
 clean:
 	rm -rf .build

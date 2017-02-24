@@ -1,0 +1,65 @@
+# This Makefile is very loosely based on https://gist.github.com/splhack/958335
+# It is overall a pretty dirty hack to force the Android sources to build
+# stand-alone. And even with this Makefile, it requires making a small number
+# of changes to the sources so that they compile without the full Android
+# system in place.
+# You should download
+#   git clone https://android.googlesource.com/platform/system/core platform_system_core
+# and place this Makefile into the adb/ directory.
+
+SRCS+=client/main.cpp adb.cpp adb_auth.cpp adb_auth_host.cpp adb_client.cpp
+SRCS+=adb_io.cpp adb_listeners.cpp adb_trace.cpp adb_utils.cpp commandline.cpp
+SRCS+=console.cpp diagnose_usb.cpp fdevent.cpp file_sync_client.cpp
+SRCS+=get_my_path_windows.cpp line_printer.cpp services.cpp shell_service.cpp
+SRCS+=shell_service_protocol.cpp sockets.cpp sysdeps_win32.cpp transport.cpp
+SRCS+=transport_local.cpp transport_usb.cpp usb_windows.cpp
+
+VPATH+= ../libcutils
+CSRCS+=load_file.c socket_inaddr_any_server_windows.c socket_local_client_windows.c
+CSRCS+=socket_local_server_windows.c socket_loopback_client_windows.c
+CSRCS+=socket_loopback_server_windows.c socket_network_client_windows.c
+CSRCS+=threads.c
+
+VPATH+=../base
+SRCS+=file.cpp logging.cpp parsenetaddress.cpp stringprintf.cpp strings.cpp
+
+VPATH+=../libcrypto_utils
+CSRCS+=android_pubkey.c
+
+CPPFLAGS+=-DADB_HOST=1
+CPPFLAGS+=-DHAVE_FORKEXEC=1
+CPPFLAGS+=-DHAVE_SYMLINKS
+CPPFLAGS+=-DHAVE_TERMIO_H
+CPPFLAGS+=-D_GNU_SOURCE
+CPPFLAGS+=-D_XOPEN_SOURCE
+CPPFLAGS+=-I.
+CPPFLAGS+=-I../include
+CPPFLAGS+=-I../base/include
+CPPFLAGS+=-I../libcrypto_utils/include
+CPPFLAGS+=-DADB_REVISION='"$(shell date +%Y-%m-%d)"'
+CPPFLAGS+=-D_Nonnull=
+CPPFLAGS+=-D_Nullable=
+CXXFLAGS+=-O2 -g -std=gnu++11 -fpermissive
+CFLAGS+=-O2 -g -std=gnu99
+LDFLAGS=-s
+LIBS=-lws2_32 -luserenv -static -lwinpthread
+
+OBJS=$(SRCS:.cpp=.o) $(CSRCS:.c=.o)
+OBJS=$(patsubst %.cpp,.build/%.o,$(SRCS)) $(patsubst %.c,.build/%.o,$(CSRCS))
+all: adb
+$(OBJS): | .build
+.build:
+	@mkdir -p $@/client
+
+adb: $(OBJS)
+	$(CXX) $(CPPFLAGS)  -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
+
+clean:
+	rm -rf .build
+
+.build/%.o : %.cpp
+	@echo $<
+	@$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+.build/%.o : %.c
+	@echo $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
