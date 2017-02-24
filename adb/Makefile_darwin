@@ -41,8 +41,8 @@ CPPFLAGS+=-D_Nonnull=
 CPPFLAGS+=-D_Nullable=
 CXXFLAGS+=-O2 -g -std=gnu++14 -fpermissive -Wexit-time-destructors
 CFLAGS+=-O2 -g
-LDFLAGS=-s
-LIBS=-framework CoreFoundation -framework IOKit -lobjc
+LDFLAGS=
+LIBS=-framework CoreFoundation -framework IOKit -lobjc -lpthread -lcrypto -lssl -lz -lutil
 
 OBJS=$(SRCS:.cpp=.o) $(CSRCS:.c=.o)
 OBJS=$(patsubst %.cpp,.build/%.o,$(SRCS)) $(patsubst %.c,.build/%.o,$(CSRCS))
