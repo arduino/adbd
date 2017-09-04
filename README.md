@@ -6,11 +6,12 @@ Ubuntu deps
 
 
 Configuration and building
+
     ./configure
     make
     sudo make install
 
-#Get started
+## Get started
 
 Copy adbd binary to /usr/bin/ folder
 Launch watcher.sh AS ROOT (it will enter an infinite loop, avoid closing its shell)
