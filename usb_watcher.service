@@ -1,0 +1,13 @@
+[Unit]
+Description=Arduino USB Gadget Service
+#After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/watcher.sh
+StandardOutput=journal
+Restart=always
+PIDFile=/tmp/usb_watcher.pid
+
+[Install]
+WantedBy=multi-user.target
