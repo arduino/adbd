@@ -40,18 +40,18 @@ UDC_MOUNTED=$(echo $UDC_MOUNTED|tr -d '\n')
 if [ x$UDC_MOUNTED == x ]; then
 echo $UDC_VAL > /sys/kernel/config/usb_gadget/g1/UDC
 if [ $? == 0 ]; then
-echo "USB configured"
+#echo "USB configured"
 sleep 10
 else
-echo "USB configuration failed"
+#echo "USB configuration failed"
 sleep 1
 fi
 else
 if [ x$UDC_VAL == x ]; then
-echo "USB detached, sleeping"
+#echo "USB detached, sleeping"
 sleep 1
 else
-echo "USB already configured, sleeping"
+#echo "USB already configured, sleeping"
 sleep 10
 fi
 fi
